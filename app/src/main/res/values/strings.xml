@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">PHEOC</string>
+    <string name="title_activity_problem">Problem</string>
+    <string name="problem_hint">State problem here.</string>
 </resources>

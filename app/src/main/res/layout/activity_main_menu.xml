@@ -66,7 +66,8 @@
         android:layout_marginTop="210dp"
         android:background="#000000"
         android:text="New Experiment"
-        android:textColor="#FFFFFF" />
+        android:textColor="#FFFFFF"
+        android:onClick="startNewExperiment"/>
 
     <Button
         android:id="@+id/past_experiments_button"
@@ -76,7 +77,8 @@
         android:layout_marginTop="20dp"
         android:background="#000000"
         android:text="Past Experiments"
-        android:textColor="#FFFFFF" />
+        android:textColor="#FFFFFF"
+        android:onClick="viewPastExperiments"/>
 
 
 </RelativeLayout>
