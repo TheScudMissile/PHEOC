@@ -16,7 +16,7 @@ public class MainMenu extends AppCompatActivity {
 
     public void startNewExperiment(View view) {
 
-        Intent intent = new Intent(this, Problem.class);
+        Intent intent = new Intent(this, Experiment.class);
         startActivity(intent);
     }
 
