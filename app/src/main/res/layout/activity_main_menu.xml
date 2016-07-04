@@ -1,65 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/rainbow"
     android:gravity="center_horizontal"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:layout_marginTop="75dp"
+    android:paddingTop="76dp"
     tools:context="com.scuddertechnologies.pheoc.MainMenu">
 
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_alignParentTop="true"
-        android:text="P"
-        android:textSize="80sp"
-        android:textColor="#F44336"/>
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
+        <TextView
+            android:id="@+id/P_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="P"
+            android:textColor="#FFFFFF"
+            android:textSize="75sp" />
+
+        <TextView
+            android:id="@+id/H_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="H"
+            android:textColor="#FFFFFF"
+            android:textSize="75sp" />
+
+        <TextView
+            android:id="@+id/E_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="E"
+            android:textColor="#FFFFFF"
+            android:textSize="75sp" />
+
+        <TextView
+            android:id="@+id/O_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="O"
+            android:textColor="#FFFFFF"
+            android:textSize="75sp" />
+
+        <TextView
+            android:id="@+id/C_textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="C"
+            android:textColor="#FFFFFF"
+            android:textSize="75sp" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/new_experiment_button"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/textView"
-        android:layout_toRightOf="@+id/textView"
-        android:text="H"
-        android:textSize="80sp"
-        android:textColor="#FF9800"/>
+        android:layout_marginTop="210dp"
+        android:background="#000000"
+        android:text="New Experiment"
+        android:textColor="#FFFFFF" />
 
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/past_experiments_button"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/textView2"
-        android:layout_toRightOf="@+id/textView2"
-        android:text="E"
-        android:textSize="80sp"
-        android:textColor="#FFEB3B"/>
+        android:layout_below="@id/new_experiment_button"
+        android:layout_marginTop="20dp"
+        android:background="#000000"
+        android:text="Past Experiments"
+        android:textColor="#FFFFFF" />
 
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/textView3"
-        android:layout_toRightOf="@+id/textView3"
-        android:text="O"
-        android:textSize="80sp"
-        android:textColor="#4CAF50"/>
 
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/textView4"
-        android:layout_toRightOf="@+id/textView4"
-        android:text="C"
-        android:textSize="80sp"
-        android:textColor="#2196F3"/>
-
-</LinearLayout>
+</RelativeLayout>
