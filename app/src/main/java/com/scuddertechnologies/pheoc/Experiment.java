@@ -13,11 +13,14 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.util.ArrayList;
+import com.jjoe64.graphview.GraphView;
+import com.jjoe64.graphview.series.DataPoint;
+import com.jjoe64.graphview.series.LineGraphSeries;
+
 
 public class Experiment extends AppCompatActivity {
 
-    public final static String GRAPHPOINTS = "com.scuddertechnologies.pheoc.GRAPHPOINTS";
+    public final static String EXPERIMENT = "com.scuddertechnologies.pheoc.EXPERIMENT";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,19 +31,18 @@ public class Experiment extends AppCompatActivity {
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setBackgroundTintList(getResources().getColorStateList(R.color.colorPrimary));
-        //fab.setImageResource(R.drawable.checkmark);
+        fab.setImageResource(R.drawable.checkMark);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewPastExperiments(view);
+                //Save to past experiments log
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    //this is what is used to graph shit from data table
-    public void viewPastExperiments(View view) {
+    public void graphData(View view) {
 
         Intent intent = new Intent(this, MainMenu.class);
         double[] graphPoints = new double[16];
@@ -86,8 +88,22 @@ public class Experiment extends AppCompatActivity {
         graphPoints[15] = Double.parseDouble(rowY8.getText().toString());
 
 
-        intent.putExtra(GRAPHPOINTS, graphPoints);
-        startActivity(intent);
+        //initialize graph
+        GraphView graph = (GraphView) findViewById(R.id.graph);
 
+        //make new list of Data points (takes array as single param)
+        LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[]{
+                new DataPoint(graphPoints[0], graphPoints[1]),
+                new DataPoint(graphPoints[2], graphPoints[3]),
+                new DataPoint(graphPoints[4], graphPoints[5]),
+                new DataPoint(graphPoints[6], graphPoints[7]),
+                new DataPoint(graphPoints[8], graphPoints[9]),
+                new DataPoint(graphPoints[10], graphPoints[11]),
+                new DataPoint(graphPoints[12], graphPoints[13]),
+                new DataPoint(graphPoints[14], graphPoints[15])
+        });
+
+        //graph that shit
+        graph.addSeries(series);
     }
 }

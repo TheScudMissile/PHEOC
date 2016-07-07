@@ -425,7 +425,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tableLayout"
-            android:text="@string/generate_graph" />
+            android:text="@string/generate_graph"
+            android:onClick="graphData"/>
 
         <com.jjoe64.graphview.GraphView
             android:id="@+id/graph"
@@ -441,9 +442,19 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/graph"
-            android:background="#2196F3"
+            android:background="#00FF13"
             android:hint="@string/observations"
             android:textAppearance="?android:attr/textAppearanceLarge" />
+
+        <EditText
+            android:id="@+id/conclusion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/observations"
+            android:layout_marginTop="20dp"
+            android:background="#2196F3"
+            android:hint="@string/conclusion"
+            android:textAppearance="?android:attr/textAppearanceLarge"/>
 
     </RelativeLayout>
 </ScrollView>
