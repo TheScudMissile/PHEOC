@@ -26,6 +26,15 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.scuddertechnologies.pheoc.MainMenu" />
         </activity>
+        <activity
+            android:name=".Past_Experiments"
+            android:label="@string/title_activity_past__experiments"
+            android:parentActivityName=".MainMenu"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.scuddertechnologies.pheoc.MainMenu" />
+        </activity>
     </application>
 
 </manifest>

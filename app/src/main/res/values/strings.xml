@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">PHEOC</string>
-    <string name="problem_hint">Type problem here...</string>
+    <string name="problem_hint">Type problem here…</string>
     <string name="title_activity_experiment">Experiment</string>
     <string name="problem_tv">Problem</string>
-    <string name="hypothesis_hint">Type hypothesis here...</string>
+    <string name="hypothesis_hint">Type hypothesis here…</string>
     <string name="p">P</string>
     <string name="h">H</string>
     <string name="e">E</string>
@@ -12,8 +12,8 @@
     <string name="new_experiment">New Experiment</string>
     <string name="past_experiments">Past Experiments</string>
     <string name="experiment">Experiment</string>
-    <string name="observations">Type observations here...</string>
-    <string name="title_hint">Type title here...</string>
+    <string name="observations">Type observations here…</string>
+    <string name="title_hint">Type title here…</string>
     <string name="trials">Trials</string>
     <string name="independent_variable_x">Independent Variable (x)</string>
     <string name="dependent_variable_y">Dependent Variable (y)</string>
@@ -26,5 +26,6 @@
     <string name="trial_7">7</string>
     <string name="trial_8">8</string>
     <string name="generate_graph">Generate Graph</string>
-    <string name="conclusion">Type conclusion here...</string>
+    <string name="conclusion">Type conclusion here…</string>
+    <string name="title_activity_past__experiments">Past Experiments</string>
 </resources>
