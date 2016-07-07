@@ -4,4 +4,11 @@
     <string name="title_activity_experiment">Experiment</string>
     <string name="problem_tv">Problem</string>
     <string name="hypothesis_hint">Hypothesis</string>
+    <string name="p">P</string>
+    <string name="h">H</string>
+    <string name="e">E</string>
+    <string name="o">O</string>
+    <string name="c">C</string>
+    <string name="new_experiment">New Experiment</string>
+    <string name="past_experiments">Past Experiments</string>
 </resources>
