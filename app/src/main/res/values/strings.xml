@@ -11,4 +11,19 @@
     <string name="c">C</string>
     <string name="new_experiment">New Experiment</string>
     <string name="past_experiments">Past Experiments</string>
+    <string name="experiment">Experiment</string>
+    <string name="observations">Observations</string>
+    <string name="title_hint">Title</string>
+    <string name="trials">Trials</string>
+    <string name="independent_variable_x">Independent Variable (x)</string>
+    <string name="dependent_variable_y">Dependent Variable (y)</string>
+    <string name="trial_1">1</string>
+    <string name="trial_2">2</string>
+    <string name="trial_3">3</string>
+    <string name="trial_4">4</string>
+    <string name="trail_5">5</string>
+    <string name="trial_6">6</string>
+    <string name="trial_7">7</string>
+    <string name="trial_8">8</string>
+    <string name="generate_graph">Generate Graph</string>
 </resources>
