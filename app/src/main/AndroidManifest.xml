@@ -35,6 +35,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.scuddertechnologies.pheoc.MainMenu" />
         </activity>
+        <provider
+            android:authorities="com.scuddertechnologies.pheoc.experimentsprovider"
+            android:name=".ExperimentsProvider"
+            android:exported="false" />
     </application>
 
 </manifest>
