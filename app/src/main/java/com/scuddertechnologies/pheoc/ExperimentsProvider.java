@@ -8,6 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 
+import java.net.URI;
+
 /**
  * Created by BScudder on 7/13/16.
  */
@@ -54,29 +56,39 @@ public class ExperimentsProvider extends ContentProvider {
 
     @Nullable
     @Override
-    public Cursor query(Uri uri, String[] strings, String s, String[] strings1, String s1) {
-        return null;
+    public Cursor query(Uri uri, String[] projection, String selection,
+                        String[] selectionArgs, String sortOrder) {
+
+        return database.query(DBOpenHelper.TABLE_EXPERIMENTS, DBOpenHelper.ALL_COLUMNS,
+                selection, null, null, null, DBOpenHelper.EXPERIMENT_CREATED + " DESC");
     }
 
     @Nullable
     @Override
     public String getType(Uri uri) {
+
         return null;
     }
 
     @Nullable
     @Override
     public Uri insert(Uri uri, ContentValues contentValues) {
-        return null;
+
+        long id = database.insert(DBOpenHelper.TABLE_EXPERIMENTS, null, contentValues);
+        return  Uri.parse(BASE_PATH + "/" + id);
     }
 
     @Override
-    public int delete(Uri uri, String s, String[] strings) {
-        return 0;
+    public int delete(Uri uri, String selection, String[] selectionArgs) {
+
+        return database.delete(DBOpenHelper.TABLE_EXPERIMENTS, selection, selectionArgs);
     }
 
     @Override
-    public int update(Uri uri, ContentValues contentValues, String s, String[] strings) {
-        return 0;
+    public int update(Uri uri, ContentValues contentValues, String selection, String[]
+            selectionArgs) {
+
+        return database.update(DBOpenHelper.TABLE_EXPERIMENTS, contentValues, selection,
+                selectionArgs);
     }
 }

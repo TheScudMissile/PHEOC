@@ -20,10 +20,13 @@ public class DBOpenHelper extends SQLiteOpenHelper {
     public static final String EXPERIMENT_ID = "_id";
     public static final String P = "problem";
     public static final String H = "hypothesis";
-    public static final String E = "data";
+    public static final String E = "experiment";
     public static final String O = "observations";
     public static final String C = "conclusion";
     public static final String EXPERIMENT_CREATED = "experimentCreated";
+
+    public static final String[] ALL_COLUMNS =
+            {EXPERIMENT_ID, P, H, E, O, C, EXPERIMENT_CREATED};
 
     //SQL needed for the table
     private static final String TABLE_CREATE =
