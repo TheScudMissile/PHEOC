@@ -23,13 +23,13 @@ public class Past_Experiments extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewPastExperiments(view);
+                //Intent intent = new Intent(this, DBOpenHelper.class);
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    private void viewPastExperiments(View view) {
+    private void newExperiment(View view) {
         Intent intent = new Intent(this, Experiment.class);
         startActivity(intent);
     }
