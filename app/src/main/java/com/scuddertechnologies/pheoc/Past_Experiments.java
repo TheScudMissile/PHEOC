@@ -7,6 +7,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
@@ -15,7 +18,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 
-public class Past_Experiments extends AppCompatActivity {
+public class Past_Experiments extends AppCompatActivity
+        implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    private CursorAdapter cursorAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,10 +33,11 @@ public class Past_Experiments extends AppCompatActivity {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setImageResource(R.drawable.plus);
 
+        //insert data into database
         insertExperiment("Problem", "Hypothesis", "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
                 "Observations", "Conclusion");
 
-        //query results in a returned cursor object
+        //query returns a cursor object with all data for the needed adapter
         Cursor cursor = getContentResolver().query
                 (ExperimentsProvider.Content_Uri, DBOpenHelper.ALL_COLUMNS,
                         null, null, null, null);
@@ -43,7 +50,7 @@ public class Past_Experiments extends AppCompatActivity {
                 DBOpenHelper.O, DBOpenHelper.C};
         //to view
         int[] to = {android.R.id.text1};
-        CursorAdapter cursorAdapter = new SimpleCursorAdapter(this,
+        cursorAdapter = new SimpleCursorAdapter(this,
                 android.R.layout.simple_list_item_1, cursor, from, to, 0);
 
         //connect adapter to listView
@@ -77,4 +84,25 @@ public class Past_Experiments extends AppCompatActivity {
         startActivity(intent);
     }
 
+
+    //implementing LoaderManager interface so query method
+    //(getting data from database) is executed on background thread
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
+        return new CursorLoader(this, ExperimentsProvider.Content_Uri,
+                null, null, null, null);
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+
+        cursorAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+
+        cursorAdapter.swapCursor(null);
+    }
 }
