@@ -31,15 +31,24 @@ public class Past_Experiments extends AppCompatActivity
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setImageResource(R.drawable.plus);
 
-        //insert data into database
-        insertExperiment("Problem", "Hypothesis", "0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0",
-                "Observations", "Conclusion");
-
         //use adapter to link database columns to listView
+        linkToAdapter();
+        insertSample();
 
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                newExperiment(view);
+            }
+        });
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void linkToAdapter() {
         //from columns
-        String[] from = {DBOpenHelper.P, DBOpenHelper.H, DBOpenHelper.E,
-                DBOpenHelper.O, DBOpenHelper.C};
+        String[] from = {DBOpenHelper.TITLE, DBOpenHelper.P, DBOpenHelper.H,
+                DBOpenHelper.E, DBOpenHelper.O, DBOpenHelper.C};
         //to view
         int[] to = {android.R.id.text1};
         cursorAdapter = new SimpleCursorAdapter(this,
@@ -50,32 +59,30 @@ public class Past_Experiments extends AppCompatActivity
         list.setAdapter(cursorAdapter);
 
         getSupportLoaderManager().initLoader(0, null, this);
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                //add stuff
-            }
-        });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
-    private void insertExperiment(String problem, String hypothesis, String experiment,
-                                  String observations, String conclusion) {
-        //add row to database
+    private void insertExperiment(String title) {
+        //add items to ListView with selected name
         ContentValues values = new ContentValues();
-        values.put(DBOpenHelper.P, problem);
-        values.put(DBOpenHelper.H, hypothesis);
-        values.put(DBOpenHelper.E, experiment);
-        values.put(DBOpenHelper.O, observations);
-        values.put(DBOpenHelper.C, conclusion);
-        Uri experimentUri = getContentResolver().insert(ExperimentsProvider.Content_Uri, values);
+        values.put(DBOpenHelper.TITLE, title);
+
+        //display the item
+        getContentResolver().insert(ExperimentsProvider.CONTENT_URI, values);
     }
 
     private void newExperiment(View view) {
+
         Intent intent = new Intent(this, Experiment.class);
         startActivity(intent);
+    }
+
+    private void insertSample() {
+
+        insertExperiment("title1");
+        insertExperiment("title2 with a bunch of extra \n shit");
+        insertExperiment("title3 that is going to be super long so I can see that it looks " +
+                "bad");
+        getSupportLoaderManager().restartLoader(0, null, this);
     }
 
 
@@ -84,7 +91,7 @@ public class Past_Experiments extends AppCompatActivity
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 
-        return new CursorLoader(this, ExperimentsProvider.Content_Uri,
+        return new CursorLoader(this, ExperimentsProvider.CONTENT_URI,
                 null, null, null, null);
     }
 

@@ -28,4 +28,5 @@
     <string name="generate_graph">Generate Graph</string>
     <string name="conclusion">Type conclusion here…</string>
     <string name="title_activity_past__experiments">Past Experiments</string>
+    <string name="create_sample_data">Create sample data</string>
 </resources>

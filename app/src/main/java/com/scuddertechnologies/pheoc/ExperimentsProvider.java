@@ -23,7 +23,7 @@ public class ExperimentsProvider extends ContentProvider {
     private static final String BASE_PATH = "experiments";
 
     //identifies content provider
-    public static final Uri Content_Uri =
+    public static final Uri CONTENT_URI =
             Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH);
 
     //Constants to identify the operation requested (1 is all data, 2 is single record)

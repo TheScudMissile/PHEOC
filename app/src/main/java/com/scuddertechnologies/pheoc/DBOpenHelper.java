@@ -18,6 +18,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
     //Constants for table and columns
     public static final String TABLE_EXPERIMENTS = "experiments";
     public static final String EXPERIMENT_ID = "_id";
+    public static final String TITLE = "title";
     public static final String P = "problem";
     public static final String H = "hypothesis";
     public static final String E = "experiment";
@@ -26,12 +27,13 @@ public class DBOpenHelper extends SQLiteOpenHelper {
     public static final String EXPERIMENT_CREATED = "experimentCreated";
 
     public static final String[] ALL_COLUMNS =
-            {EXPERIMENT_ID, P, H, E, O, C, EXPERIMENT_CREATED};
+            {EXPERIMENT_ID, TITLE, P, H, E, O, C, EXPERIMENT_CREATED};
 
     //SQL needed for the table
     private static final String TABLE_CREATE =
             "CREATE TABLE " + TABLE_EXPERIMENTS + " (" +
                     EXPERIMENT_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    TITLE + " TEXT, " +
                     P + " TEXT, " +
                     H + " TEXT, " +
                     E + " TEXT, " +
@@ -41,24 +43,25 @@ public class DBOpenHelper extends SQLiteOpenHelper {
                     ")";
 
 
-
-
     public DBOpenHelper(Context context) {
+
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+
         db.execSQL(TABLE_CREATE);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_EXPERIMENTS);
         onCreate(db);
     }
 
-    public boolean addExperiment(String problem, String hypothesis,
+    public boolean addExperiment(String title, String problem, String hypothesis,
                                  String experiment, String observations, String conclusion) {
 
         //get ref to created database to write to
@@ -66,6 +69,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
 
         //add all pieces of data for database
         ContentValues contentValues = new ContentValues();
+        contentValues.put(TITLE, title);
         contentValues.put(P, problem);
         contentValues.put(H, hypothesis);
         contentValues.put(E, experiment);
