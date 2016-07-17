@@ -1,8 +1,10 @@
 package com.scuddertechnologies.pheoc;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -42,7 +44,7 @@ public class Experiment extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void graphData(View view) {
+    private void graphData(View view) {
 
         double[] graphPoints = new double[16];
 
@@ -225,7 +227,7 @@ public class Experiment extends AppCompatActivity {
         graph.addSeries(series);
     }
 
-    public boolean validInput(EditText x, EditText y) {
+    private boolean validInput(EditText x, EditText y) {
 
         String xVal = x.getText().toString();
         String yVal = y.getText().toString();
@@ -237,5 +239,28 @@ public class Experiment extends AppCompatActivity {
         else {
             return true;
         }
+    }
+
+    private void delete() {
+
+        DialogInterface.OnClickListener dialogClickListener =
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int button) {
+                        if (button == DialogInterface.BUTTON_POSITIVE) {
+
+                            //add code to delete experiemnt
+
+                            Toast.makeText(Experiment.this, getString(R.string.deleted),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(getString(R.string.are_you_sure))
+                .setPositiveButton(getString(android.R.string.yes), dialogClickListener)
+                .setNegativeButton(getString(android.R.string.no), dialogClickListener)
+                .show();
     }
 }

@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class Past_Experiments extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Cursor>{
@@ -39,7 +40,8 @@ public class Past_Experiments extends AppCompatActivity
             @Override
             public void onClick(View view) {
 
-                newExperiment(view);
+                insertSample();
+                //newExperiment(view);
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -49,15 +51,17 @@ public class Past_Experiments extends AppCompatActivity
         //from columns
         String[] from = {DBOpenHelper.TITLE, DBOpenHelper.P, DBOpenHelper.H,
                 DBOpenHelper.E, DBOpenHelper.O, DBOpenHelper.C};
-        //to view
-        int[] to = {android.R.id.text1};
-        cursorAdapter = new SimpleCursorAdapter(this,
-                android.R.layout.simple_list_item_1, null, from, to, 0);
+
+        //to custom listItem
+        int[] to = {R.id.tvExperiment};
+        cursorAdapter = new SimpleCursorAdapter(this, R.layout.past_experiments_item,
+                null, from, to, 0);
 
         //connect adapter to listView
         ListView list = (ListView) findViewById(android.R.id.list);
         list.setAdapter(cursorAdapter);
 
+        //use loader so action is done on background thread
         getSupportLoaderManager().initLoader(0, null, this);
     }
 
@@ -82,6 +86,8 @@ public class Past_Experiments extends AppCompatActivity
         insertExperiment("title2 with a bunch of extra \n shit");
         insertExperiment("title3 that is going to be super long so I can see that it looks " +
                 "bad");
+
+        //restart the loader
         getSupportLoaderManager().restartLoader(0, null, this);
     }
 
