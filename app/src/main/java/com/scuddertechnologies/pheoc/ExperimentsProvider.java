@@ -26,13 +26,16 @@ public class ExperimentsProvider extends ContentProvider {
     public static final Uri CONTENT_URI =
             Uri.parse("content://" + AUTHORITY + "/" + BASE_PATH);
 
-    //Constants to identify the operation requested (1 is all data, 2 is single record)
+    //constants to identify the operation requested (1 is all data, 2 is single record)
     private static final int EXPERIMENTS = 1;
     private static final int EXPERIMENTS_ID = 2;
 
-    //Identify which op is being requested (1 or 2)
+    //identify which operation is being requested (1 or 2)
     private static final UriMatcher uriMatcher =
             new UriMatcher(UriMatcher.NO_MATCH);
+
+    //used to indicate updating an existing experiment
+    public static final String CONTENT_ITEM_TYPE = "Experiment";
 
     static {
 

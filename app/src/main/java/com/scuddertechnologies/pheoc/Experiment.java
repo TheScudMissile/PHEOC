@@ -1,5 +1,6 @@
 package com.scuddertechnologies.pheoc;
 
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -18,7 +20,30 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 
 public class Experiment extends AppCompatActivity {
 
-    public final static String EXPERIMENT = "com.scuddertechnologies.pheoc.EXPERIMENT";
+    //data fields for saving data
+    private EditText title;
+    private EditText problem;
+    private EditText hypothesis;
+    private EditText indepVar;
+    private EditText depVar;
+    private EditText data1;
+    private EditText data2;
+    private EditText data3;
+    private EditText data4;
+    private EditText data5;
+    private EditText data6;
+    private EditText data7;
+    private EditText data8;
+    private EditText data9;
+    private EditText data10;
+    private EditText data11;
+    private EditText data12;
+    private EditText data13;
+    private EditText data14;
+    private EditText data15;
+    private EditText data16;
+    private EditText observations;
+    private EditText conclusion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,15 +58,34 @@ public class Experiment extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                viewPastExperiments(view);
+
+                doneWithExperiment();
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
     }
 
-    private void viewPastExperiments(View view) {
-        Intent intent = new Intent(this, Past_Experiments.class);
-        startActivity(intent);
+    //saves the experiment when toolbar back button is pressed
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+                doneWithExperiment();
+                break;
+        }
+
+        return true;
+    }
+
+    //saves the experiment when phone back button is pressed
+    @Override
+    public void onBackPressed() {
+
+        doneWithExperiment();
     }
 
     private void graphData(View view) {
@@ -54,12 +98,12 @@ public class Experiment extends AppCompatActivity {
         String rowX1val;
         String rowY1val;
 
-        if(!validInput(rowX1, rowY1)) {
-            Toast.makeText(this, "You did not enter all necessary values", Toast.LENGTH_SHORT).show();
+        if (!validInput(rowX1, rowY1)) {
+            Toast.makeText(this, "You did not enter all necessary values",
+                    Toast.LENGTH_SHORT).show();
             return;
-        }
 
-        else {
+        } else {
             rowX1val = rowX1.getText().toString();
             rowY1val = rowY1.getText().toString();
         }
@@ -74,12 +118,10 @@ public class Experiment extends AppCompatActivity {
         String rowX2val;
         String rowY2val;
 
-        if(!validInput(rowX2, rowY2)) {
+        if (!validInput(rowX2, rowY2)) {
             Toast.makeText(this, "You did not enter all necessary values", Toast.LENGTH_SHORT).show();
             return;
-        }
-
-        else {
+        } else {
             rowX2val = rowX2.getText().toString();
             rowY2val = rowY2.getText().toString();
         }
@@ -94,12 +136,10 @@ public class Experiment extends AppCompatActivity {
         String rowX3val;
         String rowY3val;
 
-        if(!validInput(rowX3, rowY3)) {
+        if (!validInput(rowX3, rowY3)) {
             Toast.makeText(this, "You did not enter all necessary values", Toast.LENGTH_SHORT).show();
             return;
-        }
-
-        else {
+        } else {
             rowX3val = rowX3.getText().toString();
             rowY3val = rowY3.getText().toString();
         }
@@ -113,12 +153,10 @@ public class Experiment extends AppCompatActivity {
         String rowX4val;
         String rowY4val;
 
-        if(!validInput(rowX4, rowY4)) {
+        if (!validInput(rowX4, rowY4)) {
             Toast.makeText(this, "You did not enter all necessary values", Toast.LENGTH_SHORT).show();
             return;
-        }
-
-        else {
+        } else {
             rowX4val = rowX4.getText().toString();
             rowY4val = rowY4.getText().toString();
         }
@@ -133,12 +171,10 @@ public class Experiment extends AppCompatActivity {
         String rowX5val;
         String rowY5val;
 
-        if(!validInput(rowX5, rowY5)) {
+        if (!validInput(rowX5, rowY5)) {
             Toast.makeText(this, "You did not enter all necessary values", Toast.LENGTH_SHORT).show();
             return;
-        }
-
-        else {
+        } else {
             rowX5val = rowX5.getText().toString();
             rowY5val = rowY5.getText().toString();
         }
@@ -153,12 +189,10 @@ public class Experiment extends AppCompatActivity {
         String rowX6val;
         String rowY6val;
 
-        if(!validInput(rowX6, rowY6)) {
+        if (!validInput(rowX6, rowY6)) {
             Toast.makeText(this, "You did not enter all necessary values", Toast.LENGTH_SHORT).show();
             return;
-        }
-
-        else {
+        } else {
             rowX6val = rowX6.getText().toString();
             rowY6val = rowY6.getText().toString();
         }
@@ -173,12 +207,10 @@ public class Experiment extends AppCompatActivity {
         String rowX7val;
         String rowY7val;
 
-        if(!validInput(rowX7, rowY7)) {
+        if (!validInput(rowX7, rowY7)) {
             Toast.makeText(this, "You did not enter all necessary values", Toast.LENGTH_SHORT).show();
             return;
-        }
-
-        else {
+        } else {
             rowX7val = rowX7.getText().toString();
             rowY7val = rowY7.getText().toString();
         }
@@ -193,13 +225,11 @@ public class Experiment extends AppCompatActivity {
         String rowX8val;
         String rowY8val;
 
-        if(!validInput(rowX8, rowY8)) {
+        if (!validInput(rowX8, rowY8)) {
             Toast.makeText(this, "You did not enter all necessary values",
                     Toast.LENGTH_SHORT).show();
             return;
-        }
-
-        else {
+        } else {
             rowX8val = rowX8.getText().toString();
             rowY8val = rowY8.getText().toString();
         }
@@ -234,9 +264,7 @@ public class Experiment extends AppCompatActivity {
 
         if (xVal.matches("") || yVal.matches("")) {
             return false;
-        }
-
-        else {
+        } else {
             return true;
         }
     }
@@ -262,5 +290,81 @@ public class Experiment extends AppCompatActivity {
                 .setPositiveButton(getString(android.R.string.yes), dialogClickListener)
                 .setNegativeButton(getString(android.R.string.no), dialogClickListener)
                 .show();
+    }
+
+    //get all data input and put in database
+    private void doneWithExperiment() {
+
+        title = (EditText) findViewById(R.id.titleET);
+
+        problem = (EditText) findViewById(R.id.problem);
+
+        hypothesis = (EditText) findViewById(R.id.hypothesis);
+
+        indepVar = (EditText) findViewById(R.id.independent_variable);
+        depVar = (EditText) findViewById(R.id.dependent_variable);
+
+        data1 = (EditText) findViewById(R.id.independent_variable1);
+        data2 = (EditText) findViewById(R.id.dependent_variable1);
+
+        data3 = (EditText) findViewById(R.id.independent_variable2);
+        data4 = (EditText) findViewById(R.id.dependent_variable2);
+
+        data5 = (EditText) findViewById(R.id.independent_variable3);
+        data6 = (EditText) findViewById(R.id.dependent_variable3);
+
+        data7 = (EditText) findViewById(R.id.independent_variable4);
+        data8 = (EditText) findViewById(R.id.dependent_variable4);
+
+        data9 = (EditText) findViewById(R.id.independent_variable5);
+        data10 = (EditText) findViewById(R.id.dependent_variable5);
+
+        data11 = (EditText) findViewById(R.id.independent_variable6);
+        data12 = (EditText) findViewById(R.id.dependent_variable6);
+
+        data13 = (EditText) findViewById(R.id.independent_variable7);
+        data14 = (EditText) findViewById(R.id.dependent_variable7);
+
+        data15 = (EditText) findViewById(R.id.independent_variable8);
+        data16 = (EditText) findViewById(R.id.dependent_variable8);
+
+        EditText[] dataTable = {indepVar, depVar, data1, data2, data3, data4,
+                data5, data6, data7, data8, data9, data10, data11, data12, data13, data14,
+                data15, data16};
+
+        observations = (EditText) findViewById(R.id.observations);
+
+        conclusion = (EditText) findViewById(R.id.conclusion);
+
+        ContentValues values = new ContentValues();
+        values.put(DBOpenHelper.TITLE, title.getText().toString());
+        values.put(DBOpenHelper.P, problem.getText().toString());
+        values.put(DBOpenHelper.H, hypothesis.getText().toString());
+        values.put(DBOpenHelper.E, getDataString(dataTable));
+        values.put(DBOpenHelper.O, observations.getText().toString());
+        values.put(DBOpenHelper.C, conclusion.getText().toString());
+        getContentResolver().insert(ExperimentsProvider.CONTENT_URI, values);
+        setResult(RESULT_OK);
+
+        Intent intent = new Intent(this, MainMenu.class);
+        startActivity(intent);
+    }
+
+    private String getDataString(EditText[] dataTable) {
+
+        String result = "";
+
+        for (int i = 0; i < 18; i++) {
+
+            if (i < 17) {
+                result = result + dataTable[i].getText().toString() + ",";
+            }
+
+            else {
+                result = result + dataTable[i].getText().toString();
+            }
+        }
+
+        return result;
     }
 }

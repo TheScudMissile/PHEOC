@@ -20,6 +20,7 @@ import android.widget.TextView;
 public class Past_Experiments extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Cursor>{
 
+    private static final int REQUEST_CODE = 1;
     private CursorAdapter cursorAdapter;
 
     @Override
@@ -34,14 +35,14 @@ public class Past_Experiments extends AppCompatActivity
 
         //use adapter to link database columns to listView
         linkToAdapter();
-        insertSample();
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                insertSample();
-                //newExperiment(view);
+                //start new experiment
+                Intent intent = new Intent(Past_Experiments.this, Experiment.class);
+                startActivityForResult(intent, REQUEST_CODE);
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -61,36 +62,25 @@ public class Past_Experiments extends AppCompatActivity
         ListView list = (ListView) findViewById(android.R.id.list);
         list.setAdapter(cursorAdapter);
 
-        //use loader so action is done on background thread
+        //get loader to use so action is done on background thread
         getSupportLoaderManager().initLoader(0, null, this);
     }
 
-    private void insertExperiment(String title) {
-        //add items to ListView with selected name
+    private void insertExperiment(String title, String problem, String hypothesis,
+                                  String data, String observations, String conclusion) {
+
+        //add values to database columns
         ContentValues values = new ContentValues();
         values.put(DBOpenHelper.TITLE, title);
+        values.put(DBOpenHelper.P, problem);
+        values.put(DBOpenHelper.H, hypothesis);
+        values.put(DBOpenHelper.E, data);
+        values.put(DBOpenHelper.O, observations);
+        values.put(DBOpenHelper.C, conclusion);
 
-        //display the item
+        //insert into database
         getContentResolver().insert(ExperimentsProvider.CONTENT_URI, values);
     }
-
-    private void newExperiment(View view) {
-
-        Intent intent = new Intent(this, Experiment.class);
-        startActivity(intent);
-    }
-
-    private void insertSample() {
-
-        insertExperiment("title1");
-        insertExperiment("title2 with a bunch of extra \n shit");
-        insertExperiment("title3 that is going to be super long so I can see that it looks " +
-                "bad");
-
-        //restart the loader
-        getSupportLoaderManager().restartLoader(0, null, this);
-    }
-
 
     //implementing LoaderManager interface so query method
     //(getting data from database) is executed on background thread
@@ -111,5 +101,15 @@ public class Past_Experiments extends AppCompatActivity
     public void onLoaderReset(Loader<Cursor> loader) {
 
         cursorAdapter.swapCursor(null);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == REQUEST_CODE && requestCode == RESULT_OK) {
+
+            //use loader so action is done on background thread
+            getSupportLoaderManager().initLoader(0, null, this);
+        }
     }
 }
