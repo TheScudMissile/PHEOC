@@ -337,8 +337,15 @@ public class Experiment extends AppCompatActivity {
         conclusion = (EditText) findViewById(R.id.conclusion);
 
         ContentValues values = new ContentValues();
-        values.put(DBOpenHelper.TITLE, title.getText().toString());
+
+        if (title.getText().toString().matches("") ) {
+            values.put(DBOpenHelper.TITLE, "Untitled Experiment");
+        }
+        else {
+            values.put(DBOpenHelper.TITLE, title.getText().toString());
+        }
         values.put(DBOpenHelper.P, problem.getText().toString());
+
         values.put(DBOpenHelper.H, hypothesis.getText().toString());
         values.put(DBOpenHelper.E, getDataString(dataTable));
         values.put(DBOpenHelper.O, observations.getText().toString());
