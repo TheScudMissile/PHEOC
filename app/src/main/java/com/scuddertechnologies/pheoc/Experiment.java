@@ -10,7 +10,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -56,24 +55,6 @@ public class Experiment extends AppCompatActivity {
     private String initHypothesis;
     private String initExperimentData;
     private String[] initDataToArray;
-    private String initIndepVar;
-    private String initDepVar;
-    private String initData1;
-    private String initData2;
-    private String initData3;
-    private String initData4;
-    private String initData5;
-    private String initData6;
-    private String initData7;
-    private String initData8;
-    private String initData9;
-    private String initData10;
-    private String initData11;
-    private String initData12;
-    private String initData13;
-    private String initData14;
-    private String initData15;
-    private String initData16;
     private String initObservations;
     private String initConclusion;
 
@@ -122,7 +103,6 @@ public class Experiment extends AppCompatActivity {
         }
 
     }
-
 
 
     //saves the experiment when toolbar back button is pressed
@@ -305,7 +285,7 @@ public class Experiment extends AppCompatActivity {
         String xVal = x.getText().toString();
         String yVal = y.getText().toString();
 
-        if (xVal.matches("") || yVal.matches("")) {
+        if (xVal.matches("") || yVal.matches("") || xVal.matches(".") || yVal.matches(".")) {
             return false;
         } else {
             return true;
@@ -390,7 +370,6 @@ public class Experiment extends AppCompatActivity {
             values.put(DBOpenHelper.TITLE, title.getText().toString());
         }
         values.put(DBOpenHelper.P, problem.getText().toString());
-
         values.put(DBOpenHelper.H, hypothesis.getText().toString());
         values.put(DBOpenHelper.E, getDataString(dataTable));
         values.put(DBOpenHelper.O, observations.getText().toString());
@@ -408,13 +387,12 @@ public class Experiment extends AppCompatActivity {
 
         for (int i = 0; i < 18; i++) {
 
-            if (i < 17) {
-                result = result + dataTable[i].getText().toString() + ",";
+            if (dataTable[i].getText().toString().matches("")) {
+                result = result + "0,";
             } else {
-                result = result + dataTable[i].getText().toString();
+                result = result + dataTable[i].getText().toString() + ",";
             }
         }
-
         return result;
     }
 
@@ -429,17 +407,20 @@ public class Experiment extends AppCompatActivity {
         initHypothesis = c.getString(c.getColumnIndex(DBOpenHelper.H));
 
         //data table section of EditTexts
-        initExperimentData = c.getColumnName(c.getColumnIndex(DBOpenHelper.E));
+        initExperimentData = c.getString(c.getColumnIndex(DBOpenHelper.E));
         initDataToArray = initExperimentData.split(",");
 
-        initObservations = c.getColumnName(c.getColumnIndex(DBOpenHelper.O));
-        initConclusion = c.getColumnName(c.getColumnIndex(DBOpenHelper.C));
+        initObservations = c.getString(c.getColumnIndex(DBOpenHelper.O));
+        initConclusion = c.getString(c.getColumnIndex(DBOpenHelper.C));
     }
 
     private void setEditTexts() {
+
         title.setText(initTitle);
         problem.setText(initProblem);
         hypothesis.setText(initHypothesis);
+
+        //table
         indepVar.setText(initDataToArray[0]);
         depVar.setText(initDataToArray[1]);
         data1.setText(initDataToArray[2]);
@@ -458,5 +439,8 @@ public class Experiment extends AppCompatActivity {
         data14.setText(initDataToArray[15]);
         data15.setText(initDataToArray[16]);
         data16.setText(initDataToArray[17]);
+
+        observations.setText(initObservations);
+        conclusion.setText(initConclusion);
     }
 }
