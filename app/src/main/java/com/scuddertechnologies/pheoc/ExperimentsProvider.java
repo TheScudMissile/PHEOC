@@ -62,6 +62,12 @@ public class ExperimentsProvider extends ContentProvider {
     public Cursor query(Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
 
+        if (uriMatcher.match(uri) == EXPERIMENTS_ID) {
+
+            //gets value after slash seen above so only single experiment is selected
+            selection = DBOpenHelper.EXPERIMENT_ID + "=" + uri.getLastPathSegment();
+        }
+
         return database.query(DBOpenHelper.TABLE_EXPERIMENTS, DBOpenHelper.ALL_COLUMNS,
                 selection, null, null, null, DBOpenHelper.EXPERIMENT_CREATED + " DESC");
     }

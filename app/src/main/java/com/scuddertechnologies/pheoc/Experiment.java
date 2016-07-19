@@ -3,11 +3,14 @@ package com.scuddertechnologies.pheoc;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -20,7 +23,7 @@ import com.jjoe64.graphview.series.LineGraphSeries;
 
 public class Experiment extends AppCompatActivity {
 
-    //data fields for saving data
+    //data fields for editTexts
     private EditText title;
     private EditText problem;
     private EditText hypothesis;
@@ -45,6 +48,35 @@ public class Experiment extends AppCompatActivity {
     private EditText observations;
     private EditText conclusion;
 
+    //data fields for saving data
+    private String action;
+    private String experimentFilter;
+    private String initTitle;
+    private String initProblem;
+    private String initHypothesis;
+    private String initExperimentData;
+    private String[] initDataToArray;
+    private String initIndepVar;
+    private String initDepVar;
+    private String initData1;
+    private String initData2;
+    private String initData3;
+    private String initData4;
+    private String initData5;
+    private String initData6;
+    private String initData7;
+    private String initData8;
+    private String initData9;
+    private String initData10;
+    private String initData11;
+    private String initData12;
+    private String initData13;
+    private String initData14;
+    private String initData15;
+    private String initData16;
+    private String initObservations;
+    private String initConclusion;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,8 +96,34 @@ public class Experiment extends AppCompatActivity {
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        initializeEditTexts();
+
+        //get ref to intent and uri for complex data type Experiment
+        Intent intent = getIntent();
+        Uri uri = intent.getParcelableExtra(ExperimentsProvider.CONTENT_ITEM_TYPE);
+
+        if (uri == null) {
+            action = intent.ACTION_INSERT;
+        } else {
+            action = intent.ACTION_EDIT;
+
+            //where clause to specify single desired experiment
+            experimentFilter = DBOpenHelper.EXPERIMENT_ID + "=" + uri.getLastPathSegment();
+
+            //get access to experiment from database with Cursor
+            Cursor cursor = getContentResolver().query(uri, DBOpenHelper.ALL_COLUMNS,
+                    experimentFilter, null, null, null);
+
+            //get all needed textviews ready to fill with saved data
+            getDBRow(cursor);
+
+            //put that data in EditTexts to resume where activity was left
+            setEditTexts();
+        }
 
     }
+
+
 
     //saves the experiment when toolbar back button is pressed
     @Override
@@ -88,24 +146,23 @@ public class Experiment extends AppCompatActivity {
         doneWithExperiment();
     }
 
-    private void graphData(View view) {
+    public void graphData(View view) {
 
         double[] graphPoints = new double[16];
 
         //first row
-        EditText rowX1 = (EditText) findViewById(R.id.independent_variable1);
-        EditText rowY1 = (EditText) findViewById(R.id.dependent_variable1);
         String rowX1val;
         String rowY1val;
 
-        if (!validInput(rowX1, rowY1)) {
+        if (!validInput(data1, data2)) {
             Toast.makeText(this, "You did not enter all necessary values",
                     Toast.LENGTH_SHORT).show();
             return;
 
         } else {
-            rowX1val = rowX1.getText().toString();
-            rowY1val = rowY1.getText().toString();
+
+            rowX1val = data1.getText().toString();
+            rowY1val = data2.getText().toString();
         }
 
         graphPoints[0] = Double.parseDouble(rowX1val);
@@ -113,17 +170,15 @@ public class Experiment extends AppCompatActivity {
 
 
         //second row
-        EditText rowX2 = (EditText) findViewById(R.id.independent_variable2);
-        EditText rowY2 = (EditText) findViewById(R.id.dependent_variable2);
         String rowX2val;
         String rowY2val;
 
-        if (!validInput(rowX2, rowY2)) {
+        if (!validInput(data3, data4)) {
             Toast.makeText(this, "You did not enter all necessary values", Toast.LENGTH_SHORT).show();
             return;
         } else {
-            rowX2val = rowX2.getText().toString();
-            rowY2val = rowY2.getText().toString();
+            rowX2val = data3.getText().toString();
+            rowY2val = data4.getText().toString();
         }
 
         graphPoints[2] = Double.parseDouble(rowX2val);
@@ -131,34 +186,30 @@ public class Experiment extends AppCompatActivity {
 
 
         //third row
-        EditText rowX3 = (EditText) findViewById(R.id.independent_variable3);
-        EditText rowY3 = (EditText) findViewById(R.id.dependent_variable3);
         String rowX3val;
         String rowY3val;
 
-        if (!validInput(rowX3, rowY3)) {
+        if (!validInput(data5, data6)) {
             Toast.makeText(this, "You did not enter all necessary values", Toast.LENGTH_SHORT).show();
             return;
         } else {
-            rowX3val = rowX3.getText().toString();
-            rowY3val = rowY3.getText().toString();
+            rowX3val = data5.getText().toString();
+            rowY3val = data6.getText().toString();
         }
 
         graphPoints[4] = Double.parseDouble(rowX3val);
         graphPoints[5] = Double.parseDouble(rowY3val);
 
         //fourth row
-        EditText rowX4 = (EditText) findViewById(R.id.independent_variable4);
-        EditText rowY4 = (EditText) findViewById(R.id.dependent_variable4);
         String rowX4val;
         String rowY4val;
 
-        if (!validInput(rowX4, rowY4)) {
+        if (!validInput(data7, data8)) {
             Toast.makeText(this, "You did not enter all necessary values", Toast.LENGTH_SHORT).show();
             return;
         } else {
-            rowX4val = rowX4.getText().toString();
-            rowY4val = rowY4.getText().toString();
+            rowX4val = data7.getText().toString();
+            rowY4val = data8.getText().toString();
         }
 
         graphPoints[6] = Double.parseDouble(rowX4val);
@@ -166,17 +217,15 @@ public class Experiment extends AppCompatActivity {
 
 
         //fifth row
-        EditText rowX5 = (EditText) findViewById(R.id.independent_variable5);
-        EditText rowY5 = (EditText) findViewById(R.id.dependent_variable5);
         String rowX5val;
         String rowY5val;
 
-        if (!validInput(rowX5, rowY5)) {
+        if (!validInput(data9, data10)) {
             Toast.makeText(this, "You did not enter all necessary values", Toast.LENGTH_SHORT).show();
             return;
         } else {
-            rowX5val = rowX5.getText().toString();
-            rowY5val = rowY5.getText().toString();
+            rowX5val = data9.getText().toString();
+            rowY5val = data10.getText().toString();
         }
 
         graphPoints[8] = Double.parseDouble(rowX5val);
@@ -184,17 +233,15 @@ public class Experiment extends AppCompatActivity {
 
 
         //sixth row
-        EditText rowX6 = (EditText) findViewById(R.id.independent_variable6);
-        EditText rowY6 = (EditText) findViewById(R.id.dependent_variable6);
         String rowX6val;
         String rowY6val;
 
-        if (!validInput(rowX6, rowY6)) {
+        if (!validInput(data11, data12)) {
             Toast.makeText(this, "You did not enter all necessary values", Toast.LENGTH_SHORT).show();
             return;
         } else {
-            rowX6val = rowX6.getText().toString();
-            rowY6val = rowY6.getText().toString();
+            rowX6val = data11.getText().toString();
+            rowY6val = data12.getText().toString();
         }
 
         graphPoints[10] = Double.parseDouble(rowX6val);
@@ -202,17 +249,15 @@ public class Experiment extends AppCompatActivity {
 
 
         //seventh row
-        EditText rowX7 = (EditText) findViewById(R.id.independent_variable7);
-        EditText rowY7 = (EditText) findViewById(R.id.dependent_variable7);
         String rowX7val;
         String rowY7val;
 
-        if (!validInput(rowX7, rowY7)) {
+        if (!validInput(data13, data14)) {
             Toast.makeText(this, "You did not enter all necessary values", Toast.LENGTH_SHORT).show();
             return;
         } else {
-            rowX7val = rowX7.getText().toString();
-            rowY7val = rowY7.getText().toString();
+            rowX7val = data13.getText().toString();
+            rowY7val = data14.getText().toString();
         }
 
         graphPoints[12] = Double.parseDouble(rowX7val);
@@ -220,18 +265,16 @@ public class Experiment extends AppCompatActivity {
 
 
         //eighth row
-        EditText rowX8 = (EditText) findViewById(R.id.independent_variable8);
-        EditText rowY8 = (EditText) findViewById(R.id.dependent_variable8);
         String rowX8val;
         String rowY8val;
 
-        if (!validInput(rowX8, rowY8)) {
+        if (!validInput(data15, data16)) {
             Toast.makeText(this, "You did not enter all necessary values",
                     Toast.LENGTH_SHORT).show();
             return;
         } else {
-            rowX8val = rowX8.getText().toString();
-            rowY8val = rowY8.getText().toString();
+            rowX8val = data15.getText().toString();
+            rowY8val = data16.getText().toString();
         }
 
         graphPoints[14] = Double.parseDouble(rowX8val);
@@ -269,31 +312,7 @@ public class Experiment extends AppCompatActivity {
         }
     }
 
-    private void delete() {
-
-        DialogInterface.OnClickListener dialogClickListener =
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int button) {
-                        if (button == DialogInterface.BUTTON_POSITIVE) {
-
-                            //add code to delete experiemnt
-
-                            Toast.makeText(Experiment.this, getString(R.string.deleted),
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                };
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(getString(R.string.are_you_sure))
-                .setPositiveButton(getString(android.R.string.yes), dialogClickListener)
-                .setNegativeButton(getString(android.R.string.no), dialogClickListener)
-                .show();
-    }
-
-    //get all data input and put in database
-    private void doneWithExperiment() {
+    private void initializeEditTexts() {
 
         title = (EditText) findViewById(R.id.titleET);
 
@@ -328,20 +347,46 @@ public class Experiment extends AppCompatActivity {
         data15 = (EditText) findViewById(R.id.independent_variable8);
         data16 = (EditText) findViewById(R.id.dependent_variable8);
 
+        observations = (EditText) findViewById(R.id.observations);
+
+        conclusion = (EditText) findViewById(R.id.conclusion);
+    }
+
+    private void delete() {
+
+        DialogInterface.OnClickListener dialogClickListener =
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int button) {
+                        if (button == DialogInterface.BUTTON_POSITIVE) {
+
+                            //add code to delete experiemnt
+
+                            Toast.makeText(Experiment.this, getString(R.string.deleted),
+                                    Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(getString(R.string.are_you_sure))
+                .setPositiveButton(getString(android.R.string.yes), dialogClickListener)
+                .setNegativeButton(getString(android.R.string.no), dialogClickListener)
+                .show();
+    }
+
+    //get all data input and put in database
+    private void doneWithExperiment() {
+
         EditText[] dataTable = {indepVar, depVar, data1, data2, data3, data4,
                 data5, data6, data7, data8, data9, data10, data11, data12, data13, data14,
                 data15, data16};
 
-        observations = (EditText) findViewById(R.id.observations);
-
-        conclusion = (EditText) findViewById(R.id.conclusion);
-
         ContentValues values = new ContentValues();
 
-        if (title.getText().toString().matches("") ) {
+        if (title.getText().toString().matches("")) {
             values.put(DBOpenHelper.TITLE, "Untitled Experiment");
-        }
-        else {
+        } else {
             values.put(DBOpenHelper.TITLE, title.getText().toString());
         }
         values.put(DBOpenHelper.P, problem.getText().toString());
@@ -365,13 +410,53 @@ public class Experiment extends AppCompatActivity {
 
             if (i < 17) {
                 result = result + dataTable[i].getText().toString() + ",";
-            }
-
-            else {
+            } else {
                 result = result + dataTable[i].getText().toString();
             }
         }
 
         return result;
+    }
+
+    private void getDBRow(Cursor c) {
+
+        //move to first row
+        c.moveToFirst();
+
+        //get text from DB for all columns
+        initTitle = c.getString(c.getColumnIndex(DBOpenHelper.TITLE));
+        initProblem = c.getString(c.getColumnIndex(DBOpenHelper.P));
+        initHypothesis = c.getString(c.getColumnIndex(DBOpenHelper.H));
+
+        //data table section of EditTexts
+        initExperimentData = c.getColumnName(c.getColumnIndex(DBOpenHelper.E));
+        initDataToArray = initExperimentData.split(",");
+
+        initObservations = c.getColumnName(c.getColumnIndex(DBOpenHelper.O));
+        initConclusion = c.getColumnName(c.getColumnIndex(DBOpenHelper.C));
+    }
+
+    private void setEditTexts() {
+        title.setText(initTitle);
+        problem.setText(initProblem);
+        hypothesis.setText(initHypothesis);
+        indepVar.setText(initDataToArray[0]);
+        depVar.setText(initDataToArray[1]);
+        data1.setText(initDataToArray[2]);
+        data2.setText(initDataToArray[3]);
+        data3.setText(initDataToArray[4]);
+        data4.setText(initDataToArray[5]);
+        data5.setText(initDataToArray[6]);
+        data6.setText(initDataToArray[7]);
+        data7.setText(initDataToArray[8]);
+        data8.setText(initDataToArray[9]);
+        data9.setText(initDataToArray[10]);
+        data10.setText(initDataToArray[11]);
+        data11.setText(initDataToArray[12]);
+        data12.setText(initDataToArray[13]);
+        data13.setText(initDataToArray[14]);
+        data14.setText(initDataToArray[15]);
+        data15.setText(initDataToArray[16]);
+        data16.setText(initDataToArray[17]);
     }
 }

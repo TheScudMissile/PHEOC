@@ -14,6 +14,7 @@ import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -61,6 +62,19 @@ public class Past_Experiments extends AppCompatActivity
         //connect adapter to listView
         ListView list = (ListView) findViewById(android.R.id.list);
         list.setAdapter(cursorAdapter);
+
+        //when desired experiment is clicked, it recreates the needed view
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            //causes app to react when item in listView is clicked
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
+                Intent intent = new Intent(Past_Experiments.this, Experiment.class);
+                Uri uri = Uri.parse(ExperimentsProvider.CONTENT_URI + "/" + id);
+                intent.putExtra(ExperimentsProvider.CONTENT_ITEM_TYPE, uri);
+                startActivityForResult(intent, REQUEST_CODE);
+            }
+        });
 
         //get loader to use so action is done on background thread
         getSupportLoaderManager().initLoader(0, null, this);
