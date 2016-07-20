@@ -290,11 +290,9 @@ public class Experiment extends AppCompatActivity {
         String xVal = x.getText().toString();
         String yVal = y.getText().toString();
 
-        if (xVal.matches("") || yVal.matches("") || xVal.matches(".") || yVal.matches(".")) {
-            return false;
-        } else {
-            return true;
-        }
+        Log.d("INPUT CHECKER", "X: " + x.getText().toString() + " and Y: " + y.getText().toString());
+
+        return !(xVal.equals("") || yVal.equals("") || xVal.equals(".") || yVal.equals("."));
     }
 
     private void initializeEditTexts() {
@@ -412,7 +410,7 @@ public class Experiment extends AppCompatActivity {
 
         for (int i = 0; i < 18; i++) {
 
-            if (dataTable[i].getText().toString().matches("")) {
+            if (dataTable[i].getText().toString().equals("")) {
                 result = result + "0,";
             } else {
                 result = result + dataTable[i].getText().toString() + ",";
@@ -453,11 +451,11 @@ public class Experiment extends AppCompatActivity {
             initTitle = "";
         }
 
-        if (title.getText().toString().matches("")) {
+        if (title.getText().toString().equals("")) {
             valuesForInsert.put(DBOpenHelper.TITLE, "Untitled Experiment");
             insertExperiment(valuesForInsert, dataTable);
 
-        } else if (title.getText().toString().matches(initTitle)) {
+        } else if (title.getText().toString().equals(initTitle)) {
             updateExperiment(dataTable);
 
         } else {

@@ -65,7 +65,20 @@ public class Past_Experiments extends AppCompatActivity
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        deleteAll();
+        switch (item.getItemId()) {
+
+            case android.R.id.home:
+
+                Intent intent = new Intent(Past_Experiments.this, MainMenu.class);
+                startActivity(intent);
+                break;
+
+            case R.id.delete_all:
+
+                deleteAll();
+                break;
+        }
+
         return true;
     }
 

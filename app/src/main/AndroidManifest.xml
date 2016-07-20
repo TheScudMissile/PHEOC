@@ -19,6 +19,7 @@
         </activity>
         <activity
             android:name=".Experiment"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_experiment"
             android:parentActivityName=".MainMenu"
             android:theme="@style/AppTheme.NoActionBar">
@@ -28,6 +29,7 @@
         </activity>
         <activity
             android:name=".Past_Experiments"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_past__experiments"
             android:parentActivityName=".MainMenu"
             android:theme="@style/AppTheme.NoActionBar">
