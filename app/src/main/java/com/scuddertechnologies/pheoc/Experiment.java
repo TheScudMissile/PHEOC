@@ -67,7 +67,7 @@ public class Experiment extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setImageResource(R.drawable.checkmark);
+        fab.setImageResource(R.drawable.check_icon);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
