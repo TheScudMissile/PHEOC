@@ -75,7 +75,7 @@ public class Experiment extends AppCompatActivity {
 
                 doneWithExperiment();
             }
-        });
+        });b
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         initializeEditTexts();
