@@ -10,6 +10,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -362,23 +363,58 @@ public class Experiment extends AppCompatActivity {
                 data5, data6, data7, data8, data9, data10, data11, data12, data13, data14,
                 data15, data16};
 
-        ContentValues values = new ContentValues();
+        ContentValues valuesForInsert = new ContentValues();
+
+        //prevent NPE
+        if (initTitle == null) {
+            initTitle = "";
+        }
 
         if (title.getText().toString().matches("")) {
-            values.put(DBOpenHelper.TITLE, "Untitled Experiment");
+            valuesForInsert.put(DBOpenHelper.TITLE, "Untitled Experiment");
+            insertExperiment(valuesForInsert, dataTable);
+
+        } else if (title.getText().toString().matches(initTitle)) {
+            updateExperiment(dataTable);
+
         } else {
-            values.put(DBOpenHelper.TITLE, title.getText().toString());
+            valuesForInsert.put(DBOpenHelper.TITLE, title.getText().toString());
+            insertExperiment(valuesForInsert, dataTable);
         }
-        values.put(DBOpenHelper.P, problem.getText().toString());
-        values.put(DBOpenHelper.H, hypothesis.getText().toString());
-        values.put(DBOpenHelper.E, getDataString(dataTable));
-        values.put(DBOpenHelper.O, observations.getText().toString());
-        values.put(DBOpenHelper.C, conclusion.getText().toString());
-        getContentResolver().insert(ExperimentsProvider.CONTENT_URI, values);
-        setResult(RESULT_OK);
+
 
         Intent intent = new Intent(this, MainMenu.class);
         startActivity(intent);
+    }
+
+    private void insertExperiment(ContentValues vals, EditText[] dataArray) {
+
+        vals.put(DBOpenHelper.P, problem.getText().toString());
+        vals.put(DBOpenHelper.H, hypothesis.getText().toString());
+        vals.put(DBOpenHelper.E, getDataString(dataArray));
+        vals.put(DBOpenHelper.O, observations.getText().toString());
+        vals.put(DBOpenHelper.C, conclusion.getText().toString());
+
+        getContentResolver().insert(ExperimentsProvider.CONTENT_URI, vals);
+        Toast.makeText(this, R.string.experiment_saved, Toast.LENGTH_SHORT).show();
+        setResult(RESULT_OK);
+    }
+
+    private void updateExperiment(EditText[] dataArray) {
+
+        ContentValues values = new ContentValues();
+
+        values.put(DBOpenHelper.TITLE, title.getText().toString());
+        values.put(DBOpenHelper.P, problem.getText().toString());
+        values.put(DBOpenHelper.H, hypothesis.getText().toString());
+        values.put(DBOpenHelper.E, getDataString(dataArray));
+        values.put(DBOpenHelper.O, observations.getText().toString());
+        values.put(DBOpenHelper.C, conclusion.getText().toString());
+
+        getContentResolver().update(ExperimentsProvider.CONTENT_URI, values, experimentFilter,
+                null);
+        Toast.makeText(this, R.string.experiment_updated, Toast.LENGTH_SHORT).show();
+        setResult(RESULT_OK);
     }
 
     private String getDataString(EditText[] dataTable) {
