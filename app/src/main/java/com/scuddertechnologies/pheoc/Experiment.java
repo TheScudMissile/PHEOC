@@ -50,7 +50,6 @@ public class Experiment extends AppCompatActivity {
     private EditText conclusion;
 
     //data fields for saving data
-    private String action;
     private String experimentFilter;
     private String initTitle;
     private String initProblem;
@@ -84,11 +83,7 @@ public class Experiment extends AppCompatActivity {
         Intent intent = getIntent();
         Uri uri = intent.getParcelableExtra(ExperimentsProvider.CONTENT_ITEM_TYPE);
 
-        if (uri == null) {
-            action = intent.ACTION_INSERT;
-        } else {
-            action = intent.ACTION_EDIT;
-
+        if (uri != null) {
             //where clause to specify single desired experiment
             experimentFilter = DBOpenHelper.EXPERIMENT_ID + "=" + uri.getLastPathSegment();
 
@@ -102,7 +97,6 @@ public class Experiment extends AppCompatActivity {
             //put that data in EditTexts to resume where activity was left
             setEditTexts();
         }
-
     }
 
     //adds options menu to toolbar

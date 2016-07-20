@@ -35,4 +35,5 @@
     <string name="experiment_updated">Experiment updated.</string>
     <string name="experiment_saved">Experiment saved.</string>
     <string name="delete_action">Delete</string>
+    <string name="experiment_icon">experiment_icon</string>
 </resources>
