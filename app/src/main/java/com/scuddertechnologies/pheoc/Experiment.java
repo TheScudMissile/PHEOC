@@ -1,22 +1,18 @@
 package com.scuddertechnologies.pheoc;
 
 import android.content.ContentValues;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
-
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
@@ -54,7 +50,6 @@ public class Experiment extends AppCompatActivity {
     private String initTitle;
     private String initProblem;
     private String initHypothesis;
-    private String initExperimentData;
     private String[] initDataToArray;
     private String initObservations;
     private String initConclusion;
@@ -131,7 +126,7 @@ public class Experiment extends AppCompatActivity {
         doneWithExperiment();
     }
 
-    public void graphData(View view) {
+    public void graphData() {
 
         double[] graphPoints = new double[16];
 
@@ -290,8 +285,6 @@ public class Experiment extends AppCompatActivity {
         String xVal = x.getText().toString();
         String yVal = y.getText().toString();
 
-        Log.d("INPUT CHECKER", "X: " + x.getText().toString() + " and Y: " + y.getText().toString());
-
         return !(xVal.equals("") || yVal.equals("") || xVal.equals(".") || yVal.equals("."));
     }
 
@@ -397,7 +390,7 @@ public class Experiment extends AppCompatActivity {
 
     private void deleteExperiment() {
         getContentResolver().delete(ExperimentsProvider.CONTENT_URI, experimentFilter, null);
-        Toast.makeText(this, "Experiment Deleted.", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.deleted, Toast.LENGTH_SHORT).show();
         setResult(RESULT_OK);
 
         Intent intent = new Intent(this, MainMenu.class);
@@ -430,7 +423,7 @@ public class Experiment extends AppCompatActivity {
         initHypothesis = c.getString(c.getColumnIndex(DBOpenHelper.H));
 
         //data table section of EditTexts
-        initExperimentData = c.getString(c.getColumnIndex(DBOpenHelper.E));
+        String initExperimentData = c.getString(c.getColumnIndex(DBOpenHelper.E));
         initDataToArray = initExperimentData.split(",");
 
         initObservations = c.getString(c.getColumnIndex(DBOpenHelper.O));
@@ -452,7 +445,7 @@ public class Experiment extends AppCompatActivity {
         }
 
         if (title.getText().toString().equals("")) {
-            valuesForInsert.put(DBOpenHelper.TITLE, "Untitled Experiment");
+            valuesForInsert.put(DBOpenHelper.TITLE, getString(R.string.title_default));
             insertExperiment(valuesForInsert, dataTable);
 
         } else if (title.getText().toString().equals(initTitle)) {

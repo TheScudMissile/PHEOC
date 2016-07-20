@@ -60,24 +60,4 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_EXPERIMENTS);
         onCreate(db);
     }
-
-    public boolean addExperiment(String title, String problem, String hypothesis,
-                                 String experiment, String observations, String conclusion) {
-
-        //get ref to created database to write to
-        SQLiteDatabase db = getWritableDatabase();
-
-        //add all pieces of data for database
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(TITLE, title);
-        contentValues.put(P, problem);
-        contentValues.put(H, hypothesis);
-        contentValues.put(E, experiment);
-        contentValues.put(O, observations);
-        contentValues.put(C, conclusion);
-
-        //add to database
-        db.insert(TABLE_EXPERIMENTS, null, contentValues);
-        return true;
-    }
 }

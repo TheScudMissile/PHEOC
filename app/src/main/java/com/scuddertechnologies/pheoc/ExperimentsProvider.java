@@ -8,10 +8,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.Nullable;
 
-import java.net.URI;
-
 /**
- * Created by BScudder on 7/13/16.
+ * Add class desc.
  */
 public class ExperimentsProvider extends ContentProvider {
 
