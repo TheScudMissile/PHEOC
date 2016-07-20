@@ -11,6 +11,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -72,7 +73,6 @@ public class Experiment extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
                 doneWithExperiment();
             }
         });
@@ -105,6 +105,12 @@ public class Experiment extends AppCompatActivity {
 
     }
 
+    //adds options menu to toolbar
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_delete, menu);
+        return true;
+    }
 
     //saves the experiment when toolbar back button is pressed
     @Override
@@ -114,6 +120,10 @@ public class Experiment extends AppCompatActivity {
 
             case android.R.id.home:
                 doneWithExperiment();
+                break;
+
+            case R.id.delete:
+                deleteExperiment();
                 break;
         }
 
@@ -333,58 +343,34 @@ public class Experiment extends AppCompatActivity {
         conclusion = (EditText) findViewById(R.id.conclusion);
     }
 
-    private void delete() {
+    private void setEditTexts() {
 
-        DialogInterface.OnClickListener dialogClickListener =
-                new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int button) {
-                        if (button == DialogInterface.BUTTON_POSITIVE) {
+        title.setText(initTitle);
+        problem.setText(initProblem);
+        hypothesis.setText(initHypothesis);
 
-                            //add code to delete experiemnt
+        //table
+        indepVar.setText(initDataToArray[0]);
+        depVar.setText(initDataToArray[1]);
+        data1.setText(initDataToArray[2]);
+        data2.setText(initDataToArray[3]);
+        data3.setText(initDataToArray[4]);
+        data4.setText(initDataToArray[5]);
+        data5.setText(initDataToArray[6]);
+        data6.setText(initDataToArray[7]);
+        data7.setText(initDataToArray[8]);
+        data8.setText(initDataToArray[9]);
+        data9.setText(initDataToArray[10]);
+        data10.setText(initDataToArray[11]);
+        data11.setText(initDataToArray[12]);
+        data12.setText(initDataToArray[13]);
+        data13.setText(initDataToArray[14]);
+        data14.setText(initDataToArray[15]);
+        data15.setText(initDataToArray[16]);
+        data16.setText(initDataToArray[17]);
 
-                            Toast.makeText(Experiment.this, getString(R.string.deleted),
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                };
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(getString(R.string.are_you_sure))
-                .setPositiveButton(getString(android.R.string.yes), dialogClickListener)
-                .setNegativeButton(getString(android.R.string.no), dialogClickListener)
-                .show();
-    }
-
-    //get all data input and put in database
-    private void doneWithExperiment() {
-
-        EditText[] dataTable = {indepVar, depVar, data1, data2, data3, data4,
-                data5, data6, data7, data8, data9, data10, data11, data12, data13, data14,
-                data15, data16};
-
-        ContentValues valuesForInsert = new ContentValues();
-
-        //prevent NPE
-        if (initTitle == null) {
-            initTitle = "";
-        }
-
-        if (title.getText().toString().matches("")) {
-            valuesForInsert.put(DBOpenHelper.TITLE, "Untitled Experiment");
-            insertExperiment(valuesForInsert, dataTable);
-
-        } else if (title.getText().toString().matches(initTitle)) {
-            updateExperiment(dataTable);
-
-        } else {
-            valuesForInsert.put(DBOpenHelper.TITLE, title.getText().toString());
-            insertExperiment(valuesForInsert, dataTable);
-        }
-
-
-        Intent intent = new Intent(this, MainMenu.class);
-        startActivity(intent);
+        observations.setText(initObservations);
+        conclusion.setText(initConclusion);
     }
 
     private void insertExperiment(ContentValues vals, EditText[] dataArray) {
@@ -415,6 +401,15 @@ public class Experiment extends AppCompatActivity {
                 null);
         Toast.makeText(this, R.string.experiment_updated, Toast.LENGTH_SHORT).show();
         setResult(RESULT_OK);
+    }
+
+    private void deleteExperiment() {
+        getContentResolver().delete(ExperimentsProvider.CONTENT_URI, experimentFilter, null);
+        Toast.makeText(this, "Experiment Deleted.", Toast.LENGTH_SHORT).show();
+        setResult(RESULT_OK);
+
+        Intent intent = new Intent(this, MainMenu.class);
+        startActivity(intent);
     }
 
     private String getDataString(EditText[] dataTable) {
@@ -450,33 +445,34 @@ public class Experiment extends AppCompatActivity {
         initConclusion = c.getString(c.getColumnIndex(DBOpenHelper.C));
     }
 
-    private void setEditTexts() {
+    //get all data input and put in database
+    private void doneWithExperiment() {
 
-        title.setText(initTitle);
-        problem.setText(initProblem);
-        hypothesis.setText(initHypothesis);
+        EditText[] dataTable = {indepVar, depVar, data1, data2, data3, data4,
+                data5, data6, data7, data8, data9, data10, data11, data12, data13, data14,
+                data15, data16};
 
-        //table
-        indepVar.setText(initDataToArray[0]);
-        depVar.setText(initDataToArray[1]);
-        data1.setText(initDataToArray[2]);
-        data2.setText(initDataToArray[3]);
-        data3.setText(initDataToArray[4]);
-        data4.setText(initDataToArray[5]);
-        data5.setText(initDataToArray[6]);
-        data6.setText(initDataToArray[7]);
-        data7.setText(initDataToArray[8]);
-        data8.setText(initDataToArray[9]);
-        data9.setText(initDataToArray[10]);
-        data10.setText(initDataToArray[11]);
-        data11.setText(initDataToArray[12]);
-        data12.setText(initDataToArray[13]);
-        data13.setText(initDataToArray[14]);
-        data14.setText(initDataToArray[15]);
-        data15.setText(initDataToArray[16]);
-        data16.setText(initDataToArray[17]);
+        ContentValues valuesForInsert = new ContentValues();
 
-        observations.setText(initObservations);
-        conclusion.setText(initConclusion);
+        //prevent NPE
+        if (initTitle == null) {
+            initTitle = "";
+        }
+
+        if (title.getText().toString().matches("")) {
+            valuesForInsert.put(DBOpenHelper.TITLE, "Untitled Experiment");
+            insertExperiment(valuesForInsert, dataTable);
+
+        } else if (title.getText().toString().matches(initTitle)) {
+            updateExperiment(dataTable);
+
+        } else {
+            valuesForInsert.put(DBOpenHelper.TITLE, title.getText().toString());
+            insertExperiment(valuesForInsert, dataTable);
+        }
+
+
+        Intent intent = new Intent(this, MainMenu.class);
+        startActivity(intent);
     }
 }

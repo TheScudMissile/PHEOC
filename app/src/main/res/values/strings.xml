@@ -34,4 +34,5 @@
     <string name="default_title">Untitled Experiment</string>
     <string name="experiment_updated">Experiment updated.</string>
     <string name="experiment_saved">Experiment saved.</string>
+    <string name="delete_action">Delete</string>
 </resources>
