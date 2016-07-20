@@ -1,6 +1,7 @@
 package com.scuddertechnologies.pheoc;
 
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -11,15 +12,19 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class Past_Experiments extends AppCompatActivity
-        implements LoaderManager.LoaderCallbacks<Cursor>{
+        implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private static final int REQUEST_CODE = 1;
     private CursorAdapter cursorAdapter;
@@ -47,6 +52,21 @@ public class Past_Experiments extends AppCompatActivity
             }
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    //adds options menu to toolbar
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_delete_all, menu);
+        return true;
+    }
+
+    //saves the experiment when toolbar back button is pressed
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        deleteAll();
+        return true;
     }
 
     private void linkToAdapter() {
@@ -80,22 +100,6 @@ public class Past_Experiments extends AppCompatActivity
         getSupportLoaderManager().initLoader(0, null, this);
     }
 
-    private void insertExperiment(String title, String problem, String hypothesis,
-                                  String data, String observations, String conclusion) {
-
-        //add values to database columns
-        ContentValues values = new ContentValues();
-        values.put(DBOpenHelper.TITLE, title);
-        values.put(DBOpenHelper.P, problem);
-        values.put(DBOpenHelper.H, hypothesis);
-        values.put(DBOpenHelper.E, data);
-        values.put(DBOpenHelper.O, observations);
-        values.put(DBOpenHelper.C, conclusion);
-
-        //insert into database
-        getContentResolver().insert(ExperimentsProvider.CONTENT_URI, values);
-    }
-
     //implementing LoaderManager interface so query method
     //(getting data from database) is executed on background thread
     @Override
@@ -125,5 +129,34 @@ public class Past_Experiments extends AppCompatActivity
             //use loader so action is done on background thread
             getSupportLoaderManager().initLoader(0, null, this);
         }
+    }
+
+    private void deleteAll() {
+
+        DialogInterface.OnClickListener dialogClickListener =
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int button) {
+                        if (button == DialogInterface.BUTTON_POSITIVE) {
+
+                            //delete everything
+                            getContentResolver().delete(ExperimentsProvider.CONTENT_URI, null,
+                                    null);
+
+                            Toast.makeText(Past_Experiments.this, R.string.all_deleted,
+                                    Toast.LENGTH_SHORT).show();
+
+                            Intent intent = new Intent(Past_Experiments.this, MainMenu.class);
+                            startActivity(intent);
+                        }
+                    }
+                };
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(getString(R.string.are_you_sure))
+                .setPositiveButton(getString(android.R.string.yes), dialogClickListener)
+                .setNegativeButton(getString(android.R.string.no), dialogClickListener)
+                .show();
     }
 }
