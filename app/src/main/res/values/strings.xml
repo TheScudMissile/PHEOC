@@ -28,7 +28,8 @@
     <string name="conclusion">Type conclusion here…</string>
     <string name="title_activity_past__experiments">Past Experiments</string>
     <string name="deleted">Experiment deleted.</string>
-    <string name="are_you_sure">Are you sure you want to delete all experiments?</string>
+    <string name="are_you_sure_all">Are you sure you want to delete all experiments?</string>
+    <string name="are_you_sure_single">Are you sure you want to delete this experiment?</string>
     <string name="default_title">Untitled Experiment</string>
     <string name="experiment_updated">Experiment updated.</string>
     <string name="experiment_saved">Experiment saved.</string>

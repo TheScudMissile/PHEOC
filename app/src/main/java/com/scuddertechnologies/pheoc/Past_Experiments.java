@@ -74,13 +74,11 @@ public class Past_Experiments extends AppCompatActivity
         switch (item.getItemId()) {
 
             case android.R.id.home:
-
                 Intent intent = new Intent(Past_Experiments.this, MainMenu.class);
                 startActivity(intent);
                 break;
 
             case R.id.delete_all:
-
                 deleteAll();
                 break;
         }
@@ -171,15 +169,16 @@ public class Past_Experiments extends AppCompatActivity
                             Toast.makeText(Past_Experiments.this, R.string.all_deleted,
                                     Toast.LENGTH_SHORT).show();
 
+                            //go back to main menu
                             Intent intent = new Intent(Past_Experiments.this, MainMenu.class);
                             startActivity(intent);
                         }
                     }
                 };
 
-        //the dialoge
+        //the dialog
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage(getString(R.string.are_you_sure))
+        builder.setMessage(getString(R.string.are_you_sure_all))
                 .setPositiveButton(getString(android.R.string.yes), dialogClickListener)
                 .setNegativeButton(getString(android.R.string.no), dialogClickListener)
                 .show();

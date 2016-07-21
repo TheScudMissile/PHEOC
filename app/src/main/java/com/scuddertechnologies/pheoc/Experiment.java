@@ -1,13 +1,16 @@
 package com.scuddertechnologies.pheoc;
 
 import android.content.ContentValues;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -426,12 +429,35 @@ public class Experiment extends AppCompatActivity {
     }
 
     private void deleteExperiment() {
-        getContentResolver().delete(ExperimentsProvider.CONTENT_URI, experimentFilter, null);
-        Toast.makeText(this, R.string.deleted, Toast.LENGTH_SHORT).show();
-        setResult(RESULT_OK);
 
-        Intent intent = new Intent(this, MainMenu.class);
-        startActivity(intent);
+        //DialogInterface to confirm that user wants to delete this experiment
+        DialogInterface.OnClickListener dialogClickListener =
+                new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int button) {
+                        if (button == DialogInterface.BUTTON_POSITIVE) {
+
+                            //delete this experiment
+                            getContentResolver().delete(ExperimentsProvider.CONTENT_URI,
+                                    experimentFilter, null);
+
+                            Toast.makeText(Experiment.this, R.string.deleted,
+                                    Toast.LENGTH_SHORT).show();
+
+                            //go back to main menu
+                            Intent intent = new Intent(Experiment.this, MainMenu.class);
+                            startActivity(intent);
+                        }
+                    }
+                };
+
+        //the dialog
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(getString(R.string.are_you_sure_single))
+                .setPositiveButton(getString(android.R.string.yes), dialogClickListener)
+                .setNegativeButton(getString(android.R.string.no), dialogClickListener)
+                .show();
     }
 
     //take data from "E" section array and make a single String for simplicity in database column
