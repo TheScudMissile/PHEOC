@@ -9,7 +9,7 @@ import android.net.Uri;
 import android.support.annotation.Nullable;
 
 /**
- * Add class desc.
+ * Handles inserts, updates, and deletions of database records
  */
 public class ExperimentsProvider extends ContentProvider {
 
@@ -47,14 +47,16 @@ public class ExperimentsProvider extends ContentProvider {
 
     private SQLiteDatabase database;
 
+    //creates the database defined by the DataBaseHelper class
     @Override
     public boolean onCreate() {
 
-        DBOpenHelper helper = new DBOpenHelper(getContext());
+        DataBaseHelper helper = new DataBaseHelper(getContext());
         database = helper.getWritableDatabase();
         return false;
     }
 
+    //return the specified record in database from a query
     @Nullable
     @Override
     public Cursor query(Uri uri, String[] projection, String selection,
@@ -63,11 +65,11 @@ public class ExperimentsProvider extends ContentProvider {
         if (uriMatcher.match(uri) == EXPERIMENTS_ID) {
 
             //gets value after slash seen above so only single experiment is selected
-            selection = DBOpenHelper.EXPERIMENT_ID + "=" + uri.getLastPathSegment();
+            selection = DataBaseHelper.EXPERIMENT_ID + "=" + uri.getLastPathSegment();
         }
 
-        return database.query(DBOpenHelper.TABLE_EXPERIMENTS, DBOpenHelper.ALL_COLUMNS,
-                selection, null, null, null, DBOpenHelper.EXPERIMENT_CREATED + " DESC");
+        return database.query(DataBaseHelper.TABLE_EXPERIMENTS, DataBaseHelper.ALL_COLUMNS,
+                selection, null, null, null, DataBaseHelper.EXPERIMENT_CREATED + " DESC");
     }
 
     @Nullable
@@ -81,21 +83,21 @@ public class ExperimentsProvider extends ContentProvider {
     @Override
     public Uri insert(Uri uri, ContentValues contentValues) {
 
-        long id = database.insert(DBOpenHelper.TABLE_EXPERIMENTS, null, contentValues);
+        long id = database.insert(DataBaseHelper.TABLE_EXPERIMENTS, null, contentValues);
         return  Uri.parse(BASE_PATH + "/" + id);
     }
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
 
-        return database.delete(DBOpenHelper.TABLE_EXPERIMENTS, selection, selectionArgs);
+        return database.delete(DataBaseHelper.TABLE_EXPERIMENTS, selection, selectionArgs);
     }
 
     @Override
     public int update(Uri uri, ContentValues contentValues, String selection, String[]
             selectionArgs) {
 
-        return database.update(DBOpenHelper.TABLE_EXPERIMENTS, contentValues, selection,
+        return database.update(DataBaseHelper.TABLE_EXPERIMENTS, contentValues, selection,
                 selectionArgs);
     }
 }

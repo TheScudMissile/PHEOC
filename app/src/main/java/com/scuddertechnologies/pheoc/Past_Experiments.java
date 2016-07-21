@@ -22,10 +22,17 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+/**
+ * Holds list of all experiments.  Allows user to create a new experiment, edit an existing one,
+ * or delete all.
+ */
 public class Past_Experiments extends AppCompatActivity
         implements LoaderManager.LoaderCallbacks<Cursor> {
 
+    //request code to identify an intent
     private static final int REQUEST_CODE = 1;
+
+    //CursorAdapter to format list item
     private CursorAdapter cursorAdapter;
 
     @Override
@@ -82,11 +89,12 @@ public class Past_Experiments extends AppCompatActivity
     }
 
     private void linkToAdapter() {
-        //from columns
-        String[] from = {DBOpenHelper.TITLE, DBOpenHelper.P, DBOpenHelper.H,
-                DBOpenHelper.E, DBOpenHelper.O, DBOpenHelper.C};
 
-        //to custom listItem
+        //from columns of DB
+        String[] from = {DataBaseHelper.TITLE, DataBaseHelper.P, DataBaseHelper.H,
+                DataBaseHelper.E, DataBaseHelper.O, DataBaseHelper.C};
+
+        //to custom listItem using cursorAdapter
         int[] to = {R.id.tvExperiment};
         cursorAdapter = new SimpleCursorAdapter(this, R.layout.past_experiments_item,
                 null, from, to, 0);
@@ -95,12 +103,14 @@ public class Past_Experiments extends AppCompatActivity
         ListView list = (ListView) findViewById(android.R.id.list);
         list.setAdapter(cursorAdapter);
 
-        //when desired experiment is clicked, it recreates the needed view
+        //when desired experiment is clicked, recreate needed view
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             //causes app to react when item in listView is clicked
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int pos, long id) {
+
+                //go to Experiment activity specified by this path and pass it the needed uri
                 Intent intent = new Intent(Past_Experiments.this, Experiment.class);
                 Uri uri = Uri.parse(ExperimentsProvider.CONTENT_URI + "/" + id);
                 intent.putExtra(ExperimentsProvider.CONTENT_ITEM_TYPE, uri);
@@ -108,7 +118,8 @@ public class Past_Experiments extends AppCompatActivity
             }
         });
 
-        //get loader to use so action is done on background thread
+        //get loader to use so action is done on background thread (make resource use more
+        //efficient
         getSupportLoaderManager().initLoader(0, null, this);
     }
 
@@ -136,7 +147,7 @@ public class Past_Experiments extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-        if (requestCode == REQUEST_CODE && requestCode == RESULT_OK) {
+        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK) {
 
             //use loader so action is done on background thread
             getSupportLoaderManager().initLoader(0, null, this);
@@ -145,6 +156,7 @@ public class Past_Experiments extends AppCompatActivity
 
     private void deleteAll() {
 
+        //DialogInterface to confirm that user wants to delete all experiments
         DialogInterface.OnClickListener dialogClickListener =
                 new DialogInterface.OnClickListener() {
 
@@ -165,6 +177,7 @@ public class Past_Experiments extends AppCompatActivity
                     }
                 };
 
+        //the dialoge
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(getString(R.string.are_you_sure))
                 .setPositiveButton(getString(android.R.string.yes), dialogClickListener)

@@ -3,7 +3,6 @@ package com.scuddertechnologies.pheoc;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -19,10 +18,13 @@ import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
 
-
+/**
+ * Handles all functions for a particular experiment: saving EditTexts, graphing datasets, and
+ * deleting the current experiment
+ */
 public class Experiment extends AppCompatActivity {
 
-    //data fields for editTexts
+    //data fields for current editTexts
     private EditText title;
     private EditText problem;
     private EditText hypothesis;
@@ -47,7 +49,7 @@ public class Experiment extends AppCompatActivity {
     private EditText observations;
     private EditText conclusion;
 
-    //data fields for saving data
+    //data fields to get saved data and restore it
     private String experimentFilter;
     private String initTitle;
     private String initProblem;
@@ -74,18 +76,21 @@ public class Experiment extends AppCompatActivity {
         });
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        //restore saved content
         initializeEditTexts();
 
-        //get ref to intent and uri for complex data type Experiment
+        //get ref to intent and uri for complex data type, Experiment
         Intent intent = getIntent();
         Uri uri = intent.getParcelableExtra(ExperimentsProvider.CONTENT_ITEM_TYPE);
 
+        //if the uri gets the path to an existing experiment...
         if (uri != null) {
-            //where clause to specify single desired experiment
-            experimentFilter = DBOpenHelper.EXPERIMENT_ID + "=" + uri.getLastPathSegment();
 
-            //get access to experiment from database with Cursor
-            Cursor cursor = getContentResolver().query(uri, DBOpenHelper.ALL_COLUMNS,
+            //where clause to specify that single desired experiment
+            experimentFilter = DataBaseHelper.EXPERIMENT_ID + "=" + uri.getLastPathSegment();
+
+            //get access to experiment from database by assigning to Cursor object
+            Cursor cursor = getContentResolver().query(uri, DataBaseHelper.ALL_COLUMNS,
                     experimentFilter, null, null, null);
 
             //get all needed textviews ready to fill with saved data
@@ -96,14 +101,14 @@ public class Experiment extends AppCompatActivity {
         }
     }
 
-    //adds options menu to toolbar
+    //adds options menu to toolbar giving "delete" option
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_delete, menu);
         return true;
     }
 
-    //saves the experiment when toolbar back button is pressed
+    //saves the experiment when toolbar back button is pressed, deletes when "delete" is pressed
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -128,8 +133,10 @@ public class Experiment extends AppCompatActivity {
         doneWithExperiment();
     }
 
+    //graphs the user provided dataset to the GraphView (as long as all data is valid)
     public void graphData(View view) {
 
+        //array to hold points
         double[] graphPoints = new double[16];
 
         //first row
@@ -263,11 +270,11 @@ public class Experiment extends AppCompatActivity {
         graphPoints[15] = Double.parseDouble(rowY8val);
 
 
-        //initialize graph
+        //initialize graph and add this experiment's title as graph title
         GraphView graph = (GraphView) findViewById(R.id.graph);
         graph.setTitle(title.getText().toString());
 
-        //make new list of Data points (takes array as single param)
+        //make new list of DataPoints from the given array of double values
         LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[]{
                 new DataPoint(graphPoints[0], graphPoints[1]),
                 new DataPoint(graphPoints[2], graphPoints[3]),
@@ -282,10 +289,11 @@ public class Experiment extends AppCompatActivity {
         //clear GraphView
         graph.removeAllSeries();
 
-        //graph points
+        //graph points to GraphView
         graph.addSeries(series);
     }
 
+    //prevent user from leaving EditText blank or inserting a decimal point only
     private boolean validInput(EditText x, EditText y) {
 
         String xVal = x.getText().toString();
@@ -294,6 +302,7 @@ public class Experiment extends AppCompatActivity {
         return !(xVal.equals("") || yVal.equals("") || xVal.equals(".") || yVal.equals("."));
     }
 
+    //assign EditTexts of activity to data fields
     private void initializeEditTexts() {
 
         title = (EditText) findViewById(R.id.titleET);
@@ -334,13 +343,34 @@ public class Experiment extends AppCompatActivity {
         conclusion = (EditText) findViewById(R.id.conclusion);
     }
 
+    //restore data (if necessary) by assigning previous user data to "init" (initial) data fields
+    private void getDBRow(Cursor c) {
+
+        //move to first row of database
+        c.moveToFirst();
+
+        //get text from DB for all columns
+        initTitle = c.getString(c.getColumnIndex(DataBaseHelper.TITLE));
+        initProblem = c.getString(c.getColumnIndex(DataBaseHelper.P));
+        initHypothesis = c.getString(c.getColumnIndex(DataBaseHelper.H));
+
+        //data table section of EditTexts: get the saved string and separate into array
+        String initExperimentData = c.getString(c.getColumnIndex(DataBaseHelper.E));
+        initDataToArray = initExperimentData.split(",");
+
+        initObservations = c.getString(c.getColumnIndex(DataBaseHelper.O));
+        initConclusion = c.getString(c.getColumnIndex(DataBaseHelper.C));
+    }
+
+    //
     private void setEditTexts() {
 
+        //title, P, H
         title.setText(initTitle);
         problem.setText(initProblem);
         hypothesis.setText(initHypothesis);
 
-        //table
+        //E
         indepVar.setText(initDataToArray[0]);
         depVar.setText(initDataToArray[1]);
         data1.setText(initDataToArray[2]);
@@ -360,17 +390,18 @@ public class Experiment extends AppCompatActivity {
         data15.setText(initDataToArray[16]);
         data16.setText(initDataToArray[17]);
 
+        //O, C
         observations.setText(initObservations);
         conclusion.setText(initConclusion);
     }
 
     private void insertExperiment(ContentValues vals, EditText[] dataArray) {
 
-        vals.put(DBOpenHelper.P, problem.getText().toString());
-        vals.put(DBOpenHelper.H, hypothesis.getText().toString());
-        vals.put(DBOpenHelper.E, getDataString(dataArray));
-        vals.put(DBOpenHelper.O, observations.getText().toString());
-        vals.put(DBOpenHelper.C, conclusion.getText().toString());
+        vals.put(DataBaseHelper.P, problem.getText().toString());
+        vals.put(DataBaseHelper.H, hypothesis.getText().toString());
+        vals.put(DataBaseHelper.E, getDataString(dataArray));
+        vals.put(DataBaseHelper.O, observations.getText().toString());
+        vals.put(DataBaseHelper.C, conclusion.getText().toString());
 
         getContentResolver().insert(ExperimentsProvider.CONTENT_URI, vals);
         Toast.makeText(this, R.string.experiment_saved, Toast.LENGTH_SHORT).show();
@@ -381,12 +412,12 @@ public class Experiment extends AppCompatActivity {
 
         ContentValues values = new ContentValues();
 
-        values.put(DBOpenHelper.TITLE, title.getText().toString());
-        values.put(DBOpenHelper.P, problem.getText().toString());
-        values.put(DBOpenHelper.H, hypothesis.getText().toString());
-        values.put(DBOpenHelper.E, getDataString(dataArray));
-        values.put(DBOpenHelper.O, observations.getText().toString());
-        values.put(DBOpenHelper.C, conclusion.getText().toString());
+        values.put(DataBaseHelper.TITLE, title.getText().toString());
+        values.put(DataBaseHelper.P, problem.getText().toString());
+        values.put(DataBaseHelper.H, hypothesis.getText().toString());
+        values.put(DataBaseHelper.E, getDataString(dataArray));
+        values.put(DataBaseHelper.O, observations.getText().toString());
+        values.put(DataBaseHelper.C, conclusion.getText().toString());
 
         getContentResolver().update(ExperimentsProvider.CONTENT_URI, values, experimentFilter,
                 null);
@@ -403,12 +434,14 @@ public class Experiment extends AppCompatActivity {
         startActivity(intent);
     }
 
+    //take data from "E" section array and make a single String for simplicity in database column
     private String getDataString(EditText[] dataTable) {
 
         String result = "";
 
         for (int i = 0; i < 18; i++) {
 
+            //if a user saves an experiment with a blank in dataTable, make value 0 to avoid NPE
             if (dataTable[i].getText().toString().equals("")) {
                 result = result + "0,";
             } else {
@@ -416,24 +449,6 @@ public class Experiment extends AppCompatActivity {
             }
         }
         return result;
-    }
-
-    private void getDBRow(Cursor c) {
-
-        //move to first row
-        c.moveToFirst();
-
-        //get text from DB for all columns
-        initTitle = c.getString(c.getColumnIndex(DBOpenHelper.TITLE));
-        initProblem = c.getString(c.getColumnIndex(DBOpenHelper.P));
-        initHypothesis = c.getString(c.getColumnIndex(DBOpenHelper.H));
-
-        //data table section of EditTexts
-        String initExperimentData = c.getString(c.getColumnIndex(DBOpenHelper.E));
-        initDataToArray = initExperimentData.split(",");
-
-        initObservations = c.getString(c.getColumnIndex(DBOpenHelper.O));
-        initConclusion = c.getString(c.getColumnIndex(DBOpenHelper.C));
     }
 
     //get all data input and put in database
@@ -450,19 +465,22 @@ public class Experiment extends AppCompatActivity {
             initTitle = "";
         }
 
+        //if a title wasn't provided, use default title and add as new row in DB
         if (title.getText().toString().equals("")) {
-            valuesForInsert.put(DBOpenHelper.TITLE, getString(R.string.title_default));
+            valuesForInsert.put(DataBaseHelper.TITLE, getString(R.string.title_default));
             insertExperiment(valuesForInsert, dataTable);
 
+            //update if title match found
         } else if (title.getText().toString().equals(initTitle)) {
             updateExperiment(dataTable);
 
+            //otherwise, add new row with new title
         } else {
-            valuesForInsert.put(DBOpenHelper.TITLE, title.getText().toString());
+            valuesForInsert.put(DataBaseHelper.TITLE, title.getText().toString());
             insertExperiment(valuesForInsert, dataTable);
         }
 
-
+        //go back to main menu
         Intent intent = new Intent(this, MainMenu.class);
         startActivity(intent);
     }

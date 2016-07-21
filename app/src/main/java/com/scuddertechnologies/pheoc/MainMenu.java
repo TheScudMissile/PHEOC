@@ -5,7 +5,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
-
+/**
+ * Simple class that handles creation and navigation from main menu
+ */
 public class MainMenu extends AppCompatActivity {
 
     @Override

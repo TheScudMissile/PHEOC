@@ -6,11 +6,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 /**
- * Created by BScudder on 7/9/16.
- *
  * Defines the database for PHEOC
  */
-public class DBOpenHelper extends SQLiteOpenHelper {
+public class DataBaseHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "experiments.db";
     private static final int DATABASE_VERSION = 1;
@@ -43,7 +41,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
                     ")";
 
 
-    public DBOpenHelper(Context context) {
+    public DataBaseHelper(Context context) {
 
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
@@ -54,6 +52,7 @@ public class DBOpenHelper extends SQLiteOpenHelper {
         db.execSQL(TABLE_CREATE);
     }
 
+    //upgrades DB by dropping old and creating new
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
