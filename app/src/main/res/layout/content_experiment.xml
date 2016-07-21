@@ -345,7 +345,7 @@
                     android:layout_column="13"
                     android:layout_weight="1"
                     android:inputType="numberDecimal"
-                    android:labelFor="@id/independent_variable6"
+                    android:labelFor="@id/dependent_variable6"
                     android:padding="5dp"
                     android:textAlignment="center"
                     android:textAppearance="?android:attr/textAppearanceMedium" />

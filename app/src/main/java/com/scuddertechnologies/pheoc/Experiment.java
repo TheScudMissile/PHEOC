@@ -3,6 +3,7 @@ package com.scuddertechnologies.pheoc;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -13,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
 import com.jjoe64.graphview.GraphView;
 import com.jjoe64.graphview.series.DataPoint;
 import com.jjoe64.graphview.series.LineGraphSeries;
@@ -126,7 +128,7 @@ public class Experiment extends AppCompatActivity {
         doneWithExperiment();
     }
 
-    public void graphData() {
+    public void graphData(View view) {
 
         double[] graphPoints = new double[16];
 
@@ -263,6 +265,7 @@ public class Experiment extends AppCompatActivity {
 
         //initialize graph
         GraphView graph = (GraphView) findViewById(R.id.graph);
+        graph.setTitle(title.getText().toString());
 
         //make new list of Data points (takes array as single param)
         LineGraphSeries<DataPoint> series = new LineGraphSeries<>(new DataPoint[]{
@@ -275,6 +278,9 @@ public class Experiment extends AppCompatActivity {
                 new DataPoint(graphPoints[12], graphPoints[13]),
                 new DataPoint(graphPoints[14], graphPoints[15])
         });
+
+        //clear GraphView
+        graph.removeAllSeries();
 
         //graph points
         graph.addSeries(series);
