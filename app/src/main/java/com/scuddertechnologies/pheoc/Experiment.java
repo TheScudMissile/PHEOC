@@ -1,5 +1,6 @@
 package com.scuddertechnologies.pheoc;
 
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -438,9 +439,11 @@ public class Experiment extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int button) {
                         if (button == DialogInterface.BUTTON_POSITIVE) {
 
-                            //delete this experiment
-                            getContentResolver().delete(ExperimentsProvider.CONTENT_URI,
-                                    experimentFilter, null);
+                            //if this experiment is in the database, delete it
+                            if (experimentFilter != null) {
+                                getContentResolver().delete(ExperimentsProvider.CONTENT_URI,
+                                        experimentFilter, null);
+                            }
 
                             Toast.makeText(Experiment.this, R.string.deleted,
                                     Toast.LENGTH_SHORT).show();
